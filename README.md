@@ -191,33 +191,92 @@ Server Status: ✓ Running
 This is a demonstration MCP server for energy trading market analysis.
 ```
 
-### Example Queries
+### Using the EIA Data Tool
 
-```python
-# Get WTI crude oil spot prices
+The `eia_data_extractor` tool provides access to U.S. energy data including petroleum prices, natural gas prices, and production volumes.
+
+#### Quick Start
+
+1. **Get an EIA API key** (free):
+   ```bash
+   # Visit https://signups.eia.gov/api/signup/
+   # Add to .env file
+   echo "EIA_API_KEY=your-key-here" >> .env
+   ```
+
+2. **Query WTI spot prices** (via MCP Inspector):
+   ```json
+   {
+     "path": "petroleum/pri/spt",
+     "facets": "{\"series\":[\"RWTC\"]}",
+     "frequency": "weekly",
+     "start": "2025-01-01",
+     "limit": 10
+   }
+   ```
+
+#### Common Query Examples
+
+**WTI Crude Oil Spot Prices** (Weekly):
+```json
 {
   "path": "petroleum/pri/spt",
-  "facets": '{"series":["RWTC"]}',
+  "facets": "{\"series\":[\"RWTC\"]}",
   "frequency": "weekly",
   "start": "2025-01-01",
   "end": "2025-10-30"
 }
+```
 
-# Get Henry Hub natural gas prices
+**Brent Crude Oil Spot Prices**:
+```json
+{
+  "path": "petroleum/pri/spt",
+  "facets": "{\"series\":[\"RBRTE\"]}",
+  "frequency": "weekly",
+  "limit": 20
+}
+```
+
+**Henry Hub Natural Gas Prices** (Monthly):
+```json
 {
   "path": "natural-gas/pri/sum",
   "frequency": "monthly",
   "start": "2025-01",
   "limit": 12
 }
+```
 
-# Get STEO forecast
+**U.S. Crude Oil Production**:
+```json
+{
+  "path": "petroleum/prod/sum",
+  "facets": "{\"series\":[\"MCRFPUS1\"]}",
+  "frequency": "monthly",
+  "limit": 12
+}
+```
+
+**STEO WTI Price Forecast**:
+```json
 {
   "path": "steo",
-  "facets": '{"series":["WTIPUUS"]}',
+  "facets": "{\"series\":[\"WTIPUUS\"]}",
   "frequency": "monthly"
 }
 ```
+
+#### Common Series IDs
+
+| Trading Term | Series ID | Path | Description |
+|--------------|-----------|------|-------------|
+| WTI Spot | RWTC | petroleum/pri/spt | WTI Cushing spot price ($/barrel) |
+| Brent Spot | RBRTE | petroleum/pri/spt | Brent Europe spot price ($/barrel) |
+| U.S. Production | MCRFPUS1 | petroleum/prod/sum | U.S. crude production (thousand bbl/day) |
+| STEO WTI Forecast | WTIPUUS | steo | Short-term WTI price forecast |
+
+Browse all series: https://www.eia.gov/opendata/browser/
 
 ## Project Structure
 

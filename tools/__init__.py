@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from north_mcp_python_sdk import NorthMCPServer
 
 from .hello_world import register_hello_world
+from .eia_data_extractor import register_eia_data_extractor
 
 logger = logging.getLogger(__name__)
 
@@ -37,8 +38,15 @@ def register_all_tools(mcp: "NorthMCPServer") -> None:
     except Exception as e:
         logger.error(f"✗ Failed to register hello_world tool: {e}")
     
+    # Register EIA data extractor tool (Sprint 2)
+    try:
+        register_eia_data_extractor(mcp)
+        registered_count += 1
+        logger.info("✓ eia_data_extractor tool registered")
+    except Exception as e:
+        logger.error(f"✗ Failed to register eia_data_extractor tool: {e}")
+    
     # Future tools will be registered here:
-    # - EIA data extractor (Sprint 2)
     # - OPEC report extractor (Sprint 3)
     # - Analysis tools (Sprint 3)
     
