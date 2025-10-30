@@ -11,6 +11,8 @@ if TYPE_CHECKING:
 
 from .hello_world import register_hello_world
 from .eia_data_extractor import register_eia_data_extractor
+from .analysis_tools import register_analysis_tools
+from .trading_vernacular import register_vernacular_tool
 
 logger = logging.getLogger(__name__)
 
@@ -46,9 +48,21 @@ def register_all_tools(mcp: "NorthMCPServer") -> None:
     except Exception as e:
         logger.error(f"✗ Failed to register eia_data_extractor tool: {e}")
     
-    # Future tools will be registered here:
-    # - OPEC report extractor (Sprint 3)
-    # - Analysis tools (Sprint 3)
+    # Register analysis tools (Sprint 3)
+    try:
+        register_analysis_tools(mcp)
+        registered_count += 2  # Monte Carlo + statistics
+        logger.info("✓ analysis_tools registered (Monte Carlo, statistics)")
+    except Exception as e:
+        logger.error(f"✗ Failed to register analysis_tools: {e}")
+    
+    # Register trading vernacular tool (Sprint 3)
+    try:
+        register_vernacular_tool(mcp)
+        registered_count += 2  # explain_term + list_terms
+        logger.info("✓ trading_vernacular tool registered")
+    except Exception as e:
+        logger.error(f"✗ Failed to register trading_vernacular tool: {e}")
     
     logger.info(f"Tool registration complete: {registered_count} tool(s) registered")
     

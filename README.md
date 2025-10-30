@@ -21,9 +21,14 @@ This demo showcases North's capabilities for:
   - Natural gas (Henry Hub) prices
   - Production volumes and forecasts
   - Short-Term Energy Outlook (STEO) data
-- **OPEC Report Analyzer**: Parse Monthly Oil Market Reports (MOMR)
-- **Market Analysis**: Run simulations and trend analysis
-- **Trading Vernacular**: Understand domain-specific terminology
+- **Analysis Tools**: Statistical analysis and simulations
+  - Monte Carlo price simulations (geometric Brownian motion)
+  - Statistical calculations (mean, std dev, confidence intervals)
+  - Risk assessment and scenario planning
+- **Trading Vernacular**: Domain-specific terminology explanations
+  - 18+ essential trading terms (contango, crack spread, basis, etc.)
+  - Benchmark explanations (WTI, Brent, Henry Hub)
+  - Trading context and practical usage
 
 ### Domain Knowledge
 - Energy trading terminology (ORB, mb/d, CLZ25, NGZ25, etc.)
@@ -277,6 +282,154 @@ The `eia_data_extractor` tool provides access to U.S. energy data including petr
 | STEO WTI Forecast | WTIPUUS | steo | Short-term WTI price forecast |
 
 Browse all series: https://www.eia.gov/opendata/browser/
+
+---
+
+### Analysis Tools
+
+Statistical analysis and simulation tools for market forecasting and risk assessment.
+
+#### Monte Carlo Simulation
+
+Run Monte Carlo price simulations using geometric Brownian motion:
+
+**Tool**: `monte_carlo_simulation`
+
+**Parameters**:
+- `current_price` - Starting price (e.g., 71.50)
+- `volatility` - Annual volatility as decimal (e.g., 0.25 for 25%)
+- `days` - Number of days to simulate (default: 30)
+- `simulations` - Number of simulation paths (default: 1000)
+- `drift` - Expected daily return as decimal (default: 0.0)
+
+**Example Request**:
+```json
+{
+  "current_price": 71.50,
+  "volatility": 0.25,
+  "days": 30,
+  "simulations": 1000
+}
+```
+
+**Use Cases**:
+- Risk assessment for trading positions
+- Scenario planning for hedging strategies
+- Confidence interval estimation
+- Value-at-Risk (VaR) calculations
+
+**Example Output**:
+```
+## Monte Carlo Price Simulation
+
+**Starting Price**: $71.50
+**Volatility**: 25.0% annual
+**Time Horizon**: 30 days
+**Simulations**: 1,000
+
+### Price Distribution (Day 30)
+| Statistic | Price |
+|-----------|-------|
+| Mean | $71.89 |
+| Median | $71.45 |
+| Std Dev | $5.24 |
+
+### Confidence Intervals
+| Confidence | Lower Bound | Upper Bound | Range |
+|------------|-------------|-------------|-------|
+| 95% | $63.12 | $82.55 | $19.43 |
+| 68% | $67.23 | $76.89 | $9.66 |
+
+### Interpretation
+- **Upside Potential (95% CI)**: +15.5%
+- **Downside Risk (95% CI)**: -11.7%
+- **Expected Change**: +0.5%
+```
+
+#### Statistical Calculations
+
+Calculate statistics for a dataset:
+
+**Tool**: `calculate_statistics`
+
+**Parameters**:
+- `values` - Comma-separated numbers (e.g., "71.5,70.2,72.1")
+- `label` - Label for the dataset (e.g., "WTI Weekly Prices")
+
+**Example Request**:
+```json
+{
+  "values": "71.5,70.2,72.1,69.8,71.0",
+  "label": "WTI Weekly Prices"
+}
+```
+
+**Returns**:
+- Mean, median, standard deviation
+- Min, max, range
+- Coefficient of variation
+- Volatility assessment
+
+---
+
+### Trading Vernacular
+
+Domain-specific terminology explanations for energy trading.
+
+#### Explain Term
+
+Get detailed explanations of trading terms:
+
+**Tool**: `explain_trading_term`
+
+**Parameters**:
+- `term` - Trading term to explain (e.g., "contango", "wti", "crack spread")
+
+**Example Request**:
+```json
+{
+  "term": "contango"
+}
+```
+
+**Example Output**:
+```
+## Contango
+
+**Term**: `contango`
+
+### Definition
+Market condition where future prices are higher than spot prices.
+
+### Trading Context
+Trading: Indicates excess supply or storage costs. Traders can profit by buying 
+spot, selling futures, and storing.
+```
+
+**Available Terms**:
+- Benchmarks: WTI, Brent, Henry Hub, Cushing, NYMEX
+- Concepts: Contango, Backwardation, Crack Spread, Basis, Arb, Strip, Prompt
+- Measurements: MCF, MMBtu
+- Organizations: EIA, OPEC
+- Positions: Long, Short
+
+#### List Terms
+
+List all available trading terms:
+
+**Tool**: `list_trading_terms`
+
+**Parameters**:
+- `category` - Filter by category: "all", "benchmarks", "concepts", "measurements"
+
+**Example Request**:
+```json
+{
+  "category": "benchmarks"
+}
+```
+
+---
 
 ## Project Structure
 
